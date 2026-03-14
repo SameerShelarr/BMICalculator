@@ -31,8 +31,9 @@ import com.sameershelar.bmicalculator.ui.components.PickerStyle
 @Composable
 fun HeightInputScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         var height by remember { mutableIntStateOf(0) }
@@ -40,20 +41,23 @@ fun HeightInputScreen(modifier: Modifier = Modifier) {
         Column {
             Text(
                 text = "${height}cm",
-                style = TextStyle(
-                    fontSize = 64.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
+                style =
+                    TextStyle(
+                        fontSize = 64.sp,
+                        fontWeight = FontWeight.Bold,
+                    ),
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterHorizontally),
             )
 
             HeightPicker(
-                pickerStyle = PickerStyle(
-                    normalTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
-                    tenTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
-                    fiveTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
-                )
+                pickerStyle =
+                    PickerStyle(
+                        normalTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
+                        tenTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
+                        fiveTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
+                    ),
             ) {
                 height = it
             }
@@ -62,17 +66,17 @@ fun HeightInputScreen(modifier: Modifier = Modifier) {
         Icon(
             painter = painterResource(R.drawable.arrow_forward),
             contentDescription = "Go to next",
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-                .clickable(
-                    onClick = {
-                        // to be implemented
-                    },
-                    indication = ripple(bounded = false, radius = 64.dp),
-                    interactionSource = remember { MutableInteractionSource() }
-                )
-                .size(64.dp)
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+                    .clickable(
+                        onClick = {
+                            // to be implemented
+                        },
+                        indication = ripple(bounded = false, radius = 64.dp),
+                        interactionSource = remember { MutableInteractionSource() },
+                    ).size(64.dp),
         )
     }
 }

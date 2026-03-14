@@ -30,7 +30,9 @@ import kotlin.math.roundToInt
 
 sealed class DegreeLineType {
     object TenTypeLine : DegreeLineType()
+
     object FiveTypeLine : DegreeLineType()
+
     object NormalTypeLine : DegreeLineType()
 }
 
@@ -48,12 +50,14 @@ data class PickerStyle(
     var fiveTypeLineHeight: Int = 38,
     var spaceInterval: Int = 36,
     var numberPadding: Int = 28,
-    var lineStroke: Float = 6f
+    var lineStroke: Float = 6f,
 )
 
 @Composable
-fun HeightPicker(pickerStyle: PickerStyle, onHeightChange: (Int) -> Unit = {}) {
-
+fun HeightPicker(
+    pickerStyle: PickerStyle,
+    onHeightChange: (Int) -> Unit = {},
+) {
     var targetDistant by remember {
         mutableFloatStateOf(0f)
     }
@@ -71,94 +75,111 @@ fun HeightPicker(pickerStyle: PickerStyle, onHeightChange: (Int) -> Unit = {}) {
     }
 
     BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(200.dp),
     ) {
         Canvas(
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.TopCenter)
-                .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragStart = {
-                            startDragPoint = it.x
-                        },
-                        onDragEnd = {
-                            oldDragPoint = targetDistant
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .align(Alignment.TopCenter)
+                    .pointerInput(Unit) {
+                        detectDragGestures(
+                            onDragStart = {
+                                startDragPoint = it.x
+                            },
+                            onDragEnd = {
+                                oldDragPoint = targetDistant
+                            },
+                        ) { change, _ ->
+                            val newDistance = oldDragPoint + (change.position.x - startDragPoint)
+                            targetDistant =
+                                newDistance.coerceIn(
+                                    minimumValue =
+                                        (
+                                            (pickerStyle.initialHeight) * pickerStyle.spaceInterval -
+                                                pickerStyle.maxHeight * pickerStyle.spaceInterval
+                                        ).toFloat(),
+                                    maximumValue =
+                                        (
+                                            (pickerStyle.initialHeight) * pickerStyle.spaceInterval -
+                                                pickerStyle.minHeight * pickerStyle.spaceInterval
+                                        ).toFloat(),
+                                )
                         }
-                    ) { change, _ ->
-                        val newDistance = oldDragPoint + (change.position.x - startDragPoint)
-                        targetDistant = newDistance.coerceIn(
-                            minimumValue = ((pickerStyle.initialHeight) * pickerStyle.spaceInterval - pickerStyle.maxHeight * pickerStyle.spaceInterval).toFloat(),
-                            maximumValue = ((pickerStyle.initialHeight) * pickerStyle.spaceInterval - pickerStyle.minHeight * pickerStyle.spaceInterval).toFloat()
-                        )
-                    }
-                }
+                    },
         ) {
-
             val middlePoint = Offset(x = maxWidth.toPx() / 2f, y = maxHeight.toPx() / 2f)
 
             drawContext.canvas.nativeCanvas.apply {
-                val pickerLinesPath = Path().apply {
-                    moveTo(0f, middlePoint.y - pickerStyle.pickerWidth.toPx() / 2)
-                    lineTo(
-                        constraints.maxWidth.toFloat(),
-                        middlePoint.y - pickerStyle.pickerWidth.toPx() / 2
-                    )
-                    moveTo(0f, middlePoint.y + pickerStyle.pickerWidth.toPx() / 2)
-                    lineTo(
-                        constraints.maxWidth.toFloat(),
-                        middlePoint.y + pickerStyle.pickerWidth.toPx() / 2
-                    )
-                }
+                val pickerLinesPath =
+                    Path().apply {
+                        moveTo(0f, middlePoint.y - pickerStyle.pickerWidth.toPx() / 2)
+                        lineTo(
+                            constraints.maxWidth.toFloat(),
+                            middlePoint.y - pickerStyle.pickerWidth.toPx() / 2,
+                        )
+                        moveTo(0f, middlePoint.y + pickerStyle.pickerWidth.toPx() / 2)
+                        lineTo(
+                            constraints.maxWidth.toFloat(),
+                            middlePoint.y + pickerStyle.pickerWidth.toPx() / 2,
+                        )
+                    }
 
+                drawPath(
+                    pickerLinesPath,
+                    Paint().apply {
+                        this.style = Paint.Style.STROKE
+                        this.strokeWidth = pickerStyle.lineStroke
+                        this.color = pickerStyle.normalTypeLineColor
+                        this.setShadowLayer(86f, 0f, 0f, Color.LTGRAY)
+                    },
+                )
 
-                drawPath(pickerLinesPath, Paint().apply {
-                    this.style = Paint.Style.STROKE
-                    this.strokeWidth = pickerStyle.lineStroke
-                    this.color = pickerStyle.normalTypeLineColor
-                    this.setShadowLayer(86f, 0f, 0f, Color.LTGRAY)
-                })
+                val indicator =
+                    Path().apply {
+                        moveTo(middlePoint.x, (middlePoint.y + 10f))
+                        lineTo((middlePoint.x - 2f), middlePoint.y + pickerStyle.pickerWidth.toPx() / 2)
+                        moveTo(middlePoint.x, (middlePoint.y + 10f))
+                        lineTo((middlePoint.x + 2f), middlePoint.y + pickerStyle.pickerWidth.toPx() / 2)
+                        fillType = Path.FillType.EVEN_ODD
+                    }
 
-
-                val indicator = Path().apply {
-                    moveTo(middlePoint.x, (middlePoint.y + 10f))
-                    lineTo((middlePoint.x - 2f), middlePoint.y + pickerStyle.pickerWidth.toPx() / 2)
-                    moveTo(middlePoint.x, (middlePoint.y + 10f))
-                    lineTo((middlePoint.x + 2f), middlePoint.y + pickerStyle.pickerWidth.toPx() / 2)
-                    fillType = Path.FillType.EVEN_ODD
-                }
-
-
-                drawPath(indicator, Paint().apply {
-                    this.color = pickerStyle.normalTypeLineColor
-                    this.style = Paint.Style.FILL_AND_STROKE
-                    this.strokeWidth = pickerStyle.lineStroke
-                    this.isAntiAlias = true
-                })
-
+                drawPath(
+                    indicator,
+                    Paint().apply {
+                        this.color = pickerStyle.normalTypeLineColor
+                        this.style = Paint.Style.FILL_AND_STROKE
+                        this.strokeWidth = pickerStyle.lineStroke
+                        this.isAntiAlias = true
+                    },
+                )
 
                 for (height in pickerStyle.minHeight..pickerStyle.maxHeight) {
                     val degreeLineScaleX =
                         middlePoint.x + (pickerStyle.spaceInterval * (height - pickerStyle.initialHeight.toFloat()) + targetDistant)
-                    val lineType = when {
-                        height % 10 == 0 -> DegreeLineType.TenTypeLine
-                        height % 5 == 0 -> DegreeLineType.FiveTypeLine
-                        else -> DegreeLineType.NormalTypeLine
-                    }
+                    val lineType =
+                        when {
+                            height % 10 == 0 -> DegreeLineType.TenTypeLine
+                            height % 5 == 0 -> DegreeLineType.FiveTypeLine
+                            else -> DegreeLineType.NormalTypeLine
+                        }
 
-                    val lineColor = when (lineType) {
-                        DegreeLineType.TenTypeLine -> pickerStyle.tenTypeLineColor
-                        DegreeLineType.FiveTypeLine -> pickerStyle.fiveTypeLineColor
-                        else -> pickerStyle.normalTypeLineColor
-                    }
+                    val lineColor =
+                        when (lineType) {
+                            DegreeLineType.TenTypeLine -> pickerStyle.tenTypeLineColor
+                            DegreeLineType.FiveTypeLine -> pickerStyle.fiveTypeLineColor
+                            else -> pickerStyle.normalTypeLineColor
+                        }
 
-                    val lineHeightSize = when (lineType) {
-                        DegreeLineType.TenTypeLine -> pickerStyle.tenTypeLineHeight
-                        DegreeLineType.FiveTypeLine -> pickerStyle.fiveTypeLineHeight
-                        else -> pickerStyle.normalTypeLineHeight
-                    }
+                    val lineHeightSize =
+                        when (lineType) {
+                            DegreeLineType.TenTypeLine -> pickerStyle.tenTypeLineHeight
+                            DegreeLineType.FiveTypeLine -> pickerStyle.fiveTypeLineHeight
+                            else -> pickerStyle.normalTypeLineHeight
+                        }
 
                     this.drawLine(
                         degreeLineScaleX,
@@ -170,9 +191,8 @@ fun HeightPicker(pickerStyle: PickerStyle, onHeightChange: (Int) -> Unit = {}) {
                             this.strokeWidth = pickerStyle.lineStroke
                             this.color = lineColor
                             this.isAntiAlias = true
-                        }
+                        },
                     )
-
 
                     if (abs(middlePoint.x - degreeLineScaleX.roundToInt()) < 5) {
                         selectedHeight = height
@@ -185,20 +205,21 @@ fun HeightPicker(pickerStyle: PickerStyle, onHeightChange: (Int) -> Unit = {}) {
                             abs(height).toString(),
                             0,
                             height.toString().length,
-                            textBound
+                            textBound,
                         )
 
                         drawText(
                             abs(height).toString(),
                             (degreeLineScaleX) - textBound.width() / 2,
-                            middlePoint.y - pickerStyle.pickerWidth.toPx() / 2 + lineHeightSize * 2 + textBound.height() * 2 + pickerStyle.numberPadding,
+                            middlePoint.y - pickerStyle.pickerWidth.toPx() / 2 + lineHeightSize * 2 + textBound.height() * 2 +
+                                pickerStyle.numberPadding,
                             Paint().apply {
                                 this.textSize = 20.sp.toPx()
                                 this.textAlign = Paint.Align.CENTER
                                 this.color = pickerStyle.normalTypeLineColor
                                 this.style = Paint.Style.FILL
                                 this.isAntiAlias = true
-                            }
+                            },
                         )
                     }
                 }
