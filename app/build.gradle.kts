@@ -1,5 +1,3 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -40,20 +38,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-}
-
-ktlint {
-    android = true
-    ignoreFailures = false
-
-    additionalEditorconfig.set(
-        mapOf("ktlint_standard_function-naming" to "disabled"),
-    )
-
-    reporters {
-        reporter(ReporterType.CHECKSTYLE)
-        reporter(ReporterType.HTML)
     }
 }
 
