@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             BMICalculatorTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HomeScreen(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
                     )
                 }
             }
@@ -34,13 +34,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = "Hello, healthy person!",
-            modifier = modifier
+            modifier = modifier,
         )
     }
 }
