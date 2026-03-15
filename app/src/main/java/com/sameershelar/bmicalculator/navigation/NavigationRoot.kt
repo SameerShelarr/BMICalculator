@@ -22,10 +22,11 @@ fun NavigationRoot(modifier: Modifier = Modifier) {
 
     NavDisplay(
         backStack = backStack,
-        entryDecorators = listOf(
-            rememberSaveableStateHolderNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator(),
-        ),
+        entryDecorators =
+            listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator(),
+            ),
         entryProvider = { entry ->
             when (entry) {
                 is Route.HomeScreenRoute -> {
