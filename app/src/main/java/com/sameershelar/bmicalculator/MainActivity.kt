@@ -10,7 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.sameershelar.bmicalculator.ui.screens.HeightInputScreen
+import com.sameershelar.bmicalculator.navigation.NavigationRoot
+import com.sameershelar.bmicalculator.ui.screens.HomeScreen
 import com.sameershelar.bmicalculator.ui.theme.BMICalculatorTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,18 +23,13 @@ class MainActivity : ComponentActivity() {
                 dynamicColor = false,
             ) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen(
+                    NavigationRoot(
                         modifier = Modifier.padding(innerPadding),
                     )
                 }
             }
         }
     }
-}
-
-@Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    HeightInputScreen(modifier = modifier)
 }
 
 @Preview(
