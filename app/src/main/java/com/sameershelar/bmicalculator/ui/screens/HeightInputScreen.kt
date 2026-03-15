@@ -24,12 +24,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sameershelar.bmicalculator.R
 import com.sameershelar.bmicalculator.ui.components.HeightPicker
 import com.sameershelar.bmicalculator.ui.components.PickerStyle
+import com.sameershelar.bmicalculator.ui.viewmodels.HeightInputScreenViewModel
 
 @Composable
-fun HeightInputScreen(modifier: Modifier = Modifier) {
+fun HeightInputScreen(
+    modifier: Modifier = Modifier,
+    viewModel: HeightInputScreenViewModel = viewModel(),
+) {
     Box(
         modifier =
             modifier
