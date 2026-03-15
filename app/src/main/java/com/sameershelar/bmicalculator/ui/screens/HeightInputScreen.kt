@@ -12,10 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -24,16 +21,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sameershelar.bmicalculator.R
 import com.sameershelar.bmicalculator.ui.components.HeightPicker
 import com.sameershelar.bmicalculator.ui.components.PickerStyle
 import com.sameershelar.bmicalculator.ui.viewmodels.HeightInputScreenViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HeightInputScreen(
     modifier: Modifier = Modifier,
-    viewModel: HeightInputScreenViewModel = viewModel(),
+    viewModel: HeightInputScreenViewModel = koinViewModel(),
     onForwardClick: () -> Unit = {},
 ) {
     Box(
@@ -42,11 +39,9 @@ fun HeightInputScreen(
                 .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        var height by remember { mutableIntStateOf(0) }
-
         Column {
             Text(
-                text = "${height}cm",
+                text = "${viewModel.height}cm",
                 style =
                     TextStyle(
                         fontSize = 64.sp,
@@ -63,9 +58,10 @@ fun HeightInputScreen(
                         normalTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
                         tenTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
                         fiveTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
+                        initialHeight = viewModel.height,
                     ),
             ) {
-                height = it
+                viewModel.onHeightChange(it)
             }
         }
 
@@ -78,7 +74,7 @@ fun HeightInputScreen(
                     .padding(16.dp)
                     .clickable(
                         onClick = {
-                            onForwardClick.invoke()
+                            viewModel.saveHeight(onForwardClick)
                         },
                         indication = ripple(bounded = false, radius = 64.dp),
                         interactionSource = remember { MutableInteractionSource() },

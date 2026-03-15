@@ -15,14 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sameershelar.bmicalculator.R
 import com.sameershelar.bmicalculator.ui.viewmodels.HomeScreenViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeScreenViewModel = viewModel(),
+    viewModel: HomeScreenViewModel = koinViewModel(),
     onEditHeightClicked: () -> Unit = {},
 ) {
     Box(
@@ -32,7 +32,7 @@ fun HomeScreen(
         contentAlignment = Alignment.Center,
     ) {
         Row {
-            Text(text = "Home Screen")
+            Text(text = "Height: ${viewModel.height}cm")
             Icon(
                 painter = painterResource(R.drawable.edit),
                 contentDescription = "Go to next",
