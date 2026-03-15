@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.viewmodel.compose)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.lifecycle.viewmodel)
