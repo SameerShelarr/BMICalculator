@@ -58,7 +58,6 @@ fun HeightInputScreen(
                         normalTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
                         tenTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
                         fiveTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
-                        initialHeight = viewModel.height,
                     ),
             ) {
                 viewModel.onHeightChange(it)
