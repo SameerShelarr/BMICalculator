@@ -34,6 +34,7 @@ import com.sameershelar.bmicalculator.ui.viewmodels.HeightInputScreenViewModel
 fun HeightInputScreen(
     modifier: Modifier = Modifier,
     viewModel: HeightInputScreenViewModel = viewModel(),
+    onForwardClick: () -> Unit = {},
 ) {
     Box(
         modifier =
@@ -77,7 +78,7 @@ fun HeightInputScreen(
                     .padding(16.dp)
                     .clickable(
                         onClick = {
-                            // to be implemented
+                            onForwardClick.invoke()
                         },
                         indication = ripple(bounded = false, radius = 64.dp),
                         interactionSource = remember { MutableInteractionSource() },
