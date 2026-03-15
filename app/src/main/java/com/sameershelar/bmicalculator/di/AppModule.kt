@@ -7,8 +7,9 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val appModule = module {
-    single { DataStoreRepository(androidContext()) }
-    viewModel { HeightInputScreenViewModel(get()) }
-    viewModel { HomeScreenViewModel(get()) }
-}
+val appModule =
+    module {
+        single { DataStoreRepository(androidContext()) }
+        viewModel { HeightInputScreenViewModel(get()) }
+        viewModel { HomeScreenViewModel(get()) }
+    }

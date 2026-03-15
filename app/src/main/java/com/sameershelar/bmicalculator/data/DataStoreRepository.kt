@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-class DataStoreRepository(private val context: Context) {
+class DataStoreRepository(
+    private val context: Context,
+) {
     companion object {
         private val HEIGHT_KEY = intPreferencesKey("user_height")
     }
