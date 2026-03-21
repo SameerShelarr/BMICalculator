@@ -8,12 +8,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +35,7 @@ import com.sameershelar.bmicalculator.ui.components.HeightDisplay
 import com.sameershelar.bmicalculator.ui.components.WeightInput
 import com.sameershelar.bmicalculator.ui.theme.BMICalculatorTheme
 import com.sameershelar.bmicalculator.ui.viewmodels.HomeScreenViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -39,6 +46,8 @@ fun HomeScreen(
 ) {
     val bmiHistory by viewModel.bmiHistory.collectAsStateWithLifecycle()
     val latestBmi by viewModel.latestBmi.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     HomeScreenContent(
         modifier = modifier,
@@ -49,9 +58,23 @@ fun HomeScreen(
         bmiHistory = bmiHistory,
         onWeightInputChange = viewModel::onWeightInputChange,
         onCalculateBmi = viewModel::calculateBmi,
-        onDeleteBmiEntry = viewModel::deleteBmiEntry,
+        onDeleteBmiEntry = { entry ->
+            viewModel.deleteBmiEntry(entry)
+            scope.launch {
+                val result =
+                    snackbarHostState.showSnackbar(
+                        message = "BMI entry deleted",
+                        actionLabel = "Undo",
+                        duration = SnackbarDuration.Short,
+                    )
+                if (result == SnackbarResult.ActionPerformed) {
+                    viewModel.insertBmiEntry(entry)
+                }
+            }
+        },
         onDeleteAllHistory = viewModel::deleteAllHistory,
         onEditHeightClicked = onEditHeightClicked,
+        snackbarHostState = snackbarHostState,
     )
 }
 
@@ -68,6 +91,7 @@ fun HomeScreenContent(
     onDeleteBmiEntry: (BmiEntry) -> Unit,
     onDeleteAllHistory: () -> Unit,
     onEditHeightClicked: () -> Unit,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -94,56 +118,62 @@ fun HomeScreenContent(
         )
     }
 
-    Column(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        // Height Display & Edit
-        HeightDisplay(
-            height = height,
-            onEditHeightClicked = onEditHeightClicked,
-            modifier = Modifier.padding(bottom = 16.dp),
-        )
-
-        // Latest BMI Card
-        BmiCard(
-            bmi = latestBmi,
-            modifier = Modifier.padding(vertical = 16.dp),
-        )
-
-        // Weight Input
-        WeightInput(
-            weightInput = weightInput,
-            onWeightInputChange = onWeightInputChange,
-            isError = isWeightError,
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = onCalculateBmi,
-            modifier = Modifier.fillMaxWidth(),
+    Scaffold(
+        modifier = modifier,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { innerPadding ->
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = "Calculate BMI",
-                style = MaterialTheme.typography.labelLarge,
+            // Height Display & Edit
+            HeightDisplay(
+                height = height,
+                onEditHeightClicked = onEditHeightClicked,
+                modifier = Modifier.padding(bottom = 16.dp),
             )
-        }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        if (bmiHistory.isNotEmpty()) {
-            @Suppress("AssignedValueIsNeverRead")
-            BmiHistoryList(
-                bmiHistory = bmiHistory,
-                onDeleteBmiEntry = onDeleteBmiEntry,
-                onDeleteAllHistory = { showDeleteDialog = true },
+            // Latest BMI Card
+            BmiCard(
+                bmi = latestBmi,
+                modifier = Modifier.padding(vertical = 16.dp),
             )
-        } else {
-            EmptyHistoryState(message = randomMessage)
+
+            // Weight Input
+            WeightInput(
+                weightInput = weightInput,
+                onWeightInputChange = onWeightInputChange,
+                isError = isWeightError,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = onCalculateBmi,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    text = "Calculate BMI",
+                    style = MaterialTheme.typography.labelLarge,
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            if (bmiHistory.isNotEmpty()) {
+                @Suppress("AssignedValueIsNeverRead")
+                BmiHistoryList(
+                    bmiHistory = bmiHistory,
+                    onDeleteBmiEntry = onDeleteBmiEntry,
+                    onDeleteAllHistory = { showDeleteDialog = true },
+                )
+            } else {
+                EmptyHistoryState(message = randomMessage)
+            }
         }
     }
 }
@@ -181,8 +211,8 @@ fun HomeScreenPreview() {
                 latestBmi = 22.9f,
                 bmiHistory =
                     listOf(
-                        BmiEntry(bmi = 22.9f, weight = 70f, height = 175),
-                        BmiEntry(bmi = 24.5f, weight = 75f, height = 175),
+                        BmiEntry(id = 0, bmi = 22.9f, weight = 70f, height = 175),
+                        BmiEntry(id = 1, bmi = 24.5f, weight = 75f, height = 175),
                     ),
                 onWeightInputChange = {},
                 onCalculateBmi = {},

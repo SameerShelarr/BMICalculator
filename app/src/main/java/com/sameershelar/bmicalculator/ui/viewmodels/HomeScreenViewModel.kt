@@ -94,6 +94,12 @@ class HomeScreenViewModel(
         }
     }
 
+    fun insertBmiEntry(entry: BmiEntry) {
+        viewModelScope.launch {
+            bmiRepository.insertBmiEntry(entry)
+        }
+    }
+
     fun deleteAllHistory() {
         viewModelScope.launch {
             bmiRepository.deleteAllHistory()
