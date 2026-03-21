@@ -16,9 +16,9 @@ datastore = "1.2.1"
 koin = "4.1.1"
 room = "2.8.4"
 ksp = "2.3.6"
-kotest = "5.9.1"
-mockk = "1.13.12"
-kotlinxCoroutinesTest = "1.9.0"
+kotest = "6.1.7"
+mockk = "1.14.9"
+kotlinxCoroutinesTest = "1.10.2"
 
 [libraries]
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
