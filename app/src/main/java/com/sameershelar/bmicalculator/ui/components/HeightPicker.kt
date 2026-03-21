@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
+import android.graphics.Typeface
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -141,9 +142,15 @@ fun HeightPicker(
                 val indicator =
                     Path().apply {
                         moveTo(middlePoint.x, (middlePoint.y + 10f))
-                        lineTo((middlePoint.x - 2f), middlePoint.y + pickerStyle.pickerWidth.toPx() / 2)
+                        lineTo(
+                            (middlePoint.x - 2f),
+                            middlePoint.y + pickerStyle.pickerWidth.toPx() / 2,
+                        )
                         moveTo(middlePoint.x, (middlePoint.y + 10f))
-                        lineTo((middlePoint.x + 2f), middlePoint.y + pickerStyle.pickerWidth.toPx() / 2)
+                        lineTo(
+                            (middlePoint.x + 2f),
+                            middlePoint.y + pickerStyle.pickerWidth.toPx() / 2,
+                        )
                         fillType = Path.FillType.EVEN_ODD
                     }
 
@@ -219,6 +226,7 @@ fun HeightPicker(
                                 this.color = pickerStyle.normalTypeLineColor
                                 this.style = Paint.Style.FILL
                                 this.isAntiAlias = true
+                                this.typeface = Typeface.MONOSPACE
                             },
                         )
                     }

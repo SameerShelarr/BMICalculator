@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -17,13 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sameershelar.bmicalculator.R
 import com.sameershelar.bmicalculator.ui.components.HeightPicker
 import com.sameershelar.bmicalculator.ui.components.PickerStyle
+import com.sameershelar.bmicalculator.ui.theme.BMICalculatorTheme
 import com.sameershelar.bmicalculator.ui.viewmodels.HeightInputScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -33,6 +35,21 @@ fun HeightInputScreen(
     viewModel: HeightInputScreenViewModel = koinViewModel(),
     onForwardClick: () -> Unit = {},
 ) {
+    HeightInputScreenContent(
+        modifier = modifier,
+        height = viewModel.height,
+        onHeightChange = viewModel::onHeightChange,
+        onForwardClick = { viewModel.saveHeight(onForwardClick) },
+    )
+}
+
+@Composable
+fun HeightInputScreenContent(
+    modifier: Modifier = Modifier,
+    height: Int,
+    onHeightChange: (Int) -> Unit,
+    onForwardClick: () -> Unit,
+) {
     Box(
         modifier =
             modifier
@@ -41,9 +58,9 @@ fun HeightInputScreen(
     ) {
         Column {
             Text(
-                text = "${viewModel.height}cm",
+                text = "${height}cm",
                 style =
-                    TextStyle(
+                    MaterialTheme.typography.headlineLarge.copy(
                         fontSize = 64.sp,
                         fontWeight = FontWeight.Bold,
                     ),
@@ -60,7 +77,7 @@ fun HeightInputScreen(
                         fiveTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
                     ),
             ) {
-                viewModel.onHeightChange(it)
+                onHeightChange(it)
             }
         }
 
@@ -72,12 +89,24 @@ fun HeightInputScreen(
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
                     .clickable(
-                        onClick = {
-                            viewModel.saveHeight(onForwardClick)
-                        },
+                        onClick = onForwardClick,
                         indication = ripple(bounded = false, radius = 64.dp),
                         interactionSource = remember { MutableInteractionSource() },
                     ).size(64.dp),
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HeightInputScreenPreview() {
+    BMICalculatorTheme {
+        Surface {
+            HeightInputScreenContent(
+                height = 175,
+                onHeightChange = {},
+                onForwardClick = {},
+            )
+        }
     }
 }
