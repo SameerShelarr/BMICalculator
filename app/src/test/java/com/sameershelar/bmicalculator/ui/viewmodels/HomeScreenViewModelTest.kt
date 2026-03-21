@@ -153,6 +153,21 @@ class HomeScreenViewModelTest :
                 }
             }
 
+            When("insertBmiEntry is called") {
+                val viewModel = createViewModel()
+                testDispatcher.scheduler.advanceUntilIdle()
+
+                val entryToInsert = BmiEntry(id = 1, bmi = 22f, weight = 60f, height = 165)
+                coEvery { bmiRepository.insertBmiEntry(entryToInsert) } returns Unit
+
+                viewModel.insertBmiEntry(entryToInsert)
+                testDispatcher.scheduler.advanceUntilIdle()
+
+                Then("it should call repository to insert the entry") {
+                    coVerify { bmiRepository.insertBmiEntry(entryToInsert) }
+                }
+            }
+
             When("deleteAllHistory is called") {
                 val viewModel = createViewModel()
                 testDispatcher.scheduler.advanceUntilIdle()
