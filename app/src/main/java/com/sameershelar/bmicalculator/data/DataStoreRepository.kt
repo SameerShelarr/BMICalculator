@@ -26,6 +26,6 @@ class DataStoreRepository(
 
     fun getHeight(): Flow<Int> =
         context.dataStore.data.map { preferences ->
-            preferences[HEIGHT_KEY] ?: 150
+            preferences[HEIGHT_KEY] ?: 165
         }
 }

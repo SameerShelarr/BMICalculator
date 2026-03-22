@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class HeightInputScreenViewModel(
     private val dataStoreRepository: DataStoreRepository,
 ) : ViewModel() {
-    var height by mutableIntStateOf(150)
+    var height by mutableIntStateOf(165)
         private set
 
     init {
