@@ -1,6 +1,17 @@
 # BMI Calculator
 
+[![Latest Release](https://img.shields.io/github/v/release/SameerShelarr/BMICalculator?style=flat-square&color=blue)](https://github.com/SameerShelarr/BMICalculator/releases/latest)
+
 A native **Android** app that calculates **Body Mass Index (BMI)** from height and weight, keeps a **local history** of calculations, and lets you **adjust height** with a custom picker. The UI is built with **Jetpack Compose** and **Material 3**.
+
+---
+
+### 🚀 Get Started
+
+- **Download Latest APK:** [Releases / latest](https://github.com/SameerShelarr/BMICalculator/releases/latest)
+- **Privacy Policy:** [PRIVACY_POLICY.md](PRIVACY_POLICY.md)
+
+---
 
 > **Note:** BMI is a general screening metric. It is not a medical diagnosis. Consult a healthcare professional for personal health decisions.
 
