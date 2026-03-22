@@ -72,6 +72,7 @@ fun HeightInputScreenContent(
             HeightPicker(
                 pickerStyle =
                     PickerStyle(
+                        initialHeight = height,
                         normalTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
                         tenTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
                         fiveTypeLineColor = MaterialTheme.colorScheme.primary.toArgb(),
@@ -87,13 +88,27 @@ fun HeightInputScreenContent(
             modifier =
                 Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(16.dp)
+                    .padding(24.dp)
                     .clickable(
                         onClick = onForwardClick,
                         indication = ripple(bounded = false, radius = 64.dp),
                         interactionSource = remember { MutableInteractionSource() },
-                    ).size(64.dp),
+                    ).size(48.dp),
         )
+    }
+}
+
+@Preview(showBackground = true, device = "spec:width=800dp,height=480dp,dpi=440")
+@Composable
+fun HeightInputScreenLandscapePreview() {
+    BMICalculatorTheme {
+        Surface {
+            HeightInputScreenContent(
+                height = 175,
+                onHeightChange = {},
+                onForwardClick = {},
+            )
+        }
     }
 }
 
