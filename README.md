@@ -39,18 +39,18 @@ A native **Android** app that calculates **Body Mass Index (BMI)** from height a
 
 | Screen / state | Placeholder |
 |----------------|-------------|
-| Home — portrait, empty history | ![Home — portrait (empty history)](docs/screenshots/home-portrait-empty.png) |
-| Home — portrait, with history | ![Home — portrait (with history)](docs/screenshots/home-portrait-history.png) |
-| Home — landscape | ![Home — landscape](docs/screenshots/home-landscape.png) |
-| Height picker | ![Height input / picker](docs/screenshots/height-picker.png) |
-| Clear history dialog | ![Clear history confirmation](docs/screenshots/dialog-clear-history.png) |
-| Delete entry + snackbar (optional) | ![Snackbar undo after delete](docs/screenshots/snackbar-undo.png) |
+| Home — portrait, empty history | <img width="320" height="880" alt="Screenshot_20260322_183530" src="https://github.com/user-attachments/assets/ad4705be-c455-46b7-ae76-61b9dd4c7c37" /> |
+| Home — portrait, with history | <img width="320" height="880" alt="Screenshot_20260322_183555" src="https://github.com/user-attachments/assets/6dc01a29-06f5-4d71-8390-b8b8e0e5bdc1" /> |
+| Home — landscape | <img width="880" height="340" alt="Screenshot_20260322_210648" src="https://github.com/user-attachments/assets/e3ece740-64a7-4fee-aeda-dabeb5f50135" /> |
+| Height picker | <img width="320" height="880" alt="Screenshot_20260322_183515" src="https://github.com/user-attachments/assets/3bd552fc-3e7f-47ab-8f23-6038ba5837a3" /> |
+| Clear history dialog | <img width="320" height="880" alt="Screenshot_20260322_183654" src="https://github.com/user-attachments/assets/7558a1b3-878a-4e47-8f2e-6c126eff7cb3" /> |
+| Delete entry + snackbar (optional) | <img width="320" height="880" alt="Screenshot_20260322_183643" src="https://github.com/user-attachments/assets/4f3683c2-8372-428a-a001-4889b6ad949b" /> |
 
-**Dark theme** (optional extras):
+**Light theme**:
 
 | Screen / state | Placeholder |
 |----------------|-------------|
-| Home — dark | ![Home — dark theme](docs/screenshots/home-dark.png) |
+| Home — Light with history | <img width="320" height="880" alt="Screenshot_20260322_184132" src="https://github.com/user-attachments/assets/41f5f29c-76ba-4843-8ede-7328e460da44" /> |
 
 ---
 
