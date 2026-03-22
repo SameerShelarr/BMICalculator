@@ -1,11 +1,15 @@
 package com.sameershelar.bmicalculator.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -23,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -94,6 +99,8 @@ fun HomeScreenContent(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val emptyMessages =
         remember {
@@ -122,57 +129,135 @@ fun HomeScreenContent(
         modifier = modifier,
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            // Height Display & Edit
-            HeightDisplay(
-                height = height,
-                onEditHeightClicked = onEditHeightClicked,
-                modifier = Modifier.padding(bottom = 16.dp),
-            )
-
-            // Latest BMI Card
-            BmiCard(
-                bmi = latestBmi,
-                modifier = Modifier.padding(vertical = 16.dp),
-            )
-
-            // Weight Input
-            WeightInput(
-                weightInput = weightInput,
-                onWeightInputChange = onWeightInputChange,
-                isError = isWeightError,
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onCalculateBmi,
-                modifier = Modifier.fillMaxWidth(),
+        if (isLandscape) {
+            Row(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(horizontal = 16.dp),
             ) {
-                Text(
-                    text = "Calculate BMI",
-                    style = MaterialTheme.typography.labelLarge,
-                )
+                // Left column: Inputs and Latest BMI
+                Column(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(vertical = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    HeightDisplay(
+                        height = height,
+                        onEditHeightClicked = onEditHeightClicked,
+                    )
+
+                    BmiCard(
+                        bmi = latestBmi,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+
+                    WeightInput(
+                        weightInput = weightInput,
+                        onWeightInputChange = onWeightInputChange,
+                        isError = isWeightError,
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(
+                        onClick = onCalculateBmi,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = "Calculate BMI",
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(24.dp))
+
+                // Right column: History
+                Column(
+                    modifier =
+                        Modifier
+                            .weight(1.2f)
+                            .fillMaxHeight()
+                            .padding(vertical = 16.dp),
+                ) {
+                    if (bmiHistory.isNotEmpty()) {
+                        @Suppress("AssignedValueIsNeverRead")
+                        BmiHistoryList(
+                            bmiHistory = bmiHistory,
+                            onDeleteBmiEntry = onDeleteBmiEntry,
+                            onDeleteAllHistory = { showDeleteDialog = true },
+                            modifier = Modifier.weight(1f),
+                        )
+                    } else {
+                        EmptyHistoryState(
+                            message = randomMessage,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                }
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            if (bmiHistory.isNotEmpty()) {
-                @Suppress("AssignedValueIsNeverRead")
-                BmiHistoryList(
-                    bmiHistory = bmiHistory,
-                    onDeleteBmiEntry = onDeleteBmiEntry,
-                    onDeleteAllHistory = { showDeleteDialog = true },
+        } else {
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                // Height Display & Edit
+                HeightDisplay(
+                    height = height,
+                    onEditHeightClicked = onEditHeightClicked,
+                    modifier = Modifier.padding(bottom = 16.dp),
                 )
-            } else {
-                EmptyHistoryState(message = randomMessage)
+
+                // Latest BMI Card
+                BmiCard(
+                    bmi = latestBmi,
+                    modifier = Modifier.padding(vertical = 16.dp),
+                )
+
+                // Weight Input
+                WeightInput(
+                    weightInput = weightInput,
+                    onWeightInputChange = onWeightInputChange,
+                    isError = isWeightError,
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = onCalculateBmi,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = "Calculate BMI",
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                if (bmiHistory.isNotEmpty()) {
+                    @Suppress("AssignedValueIsNeverRead")
+                    BmiHistoryList(
+                        bmiHistory = bmiHistory,
+                        onDeleteBmiEntry = onDeleteBmiEntry,
+                        onDeleteAllHistory = { showDeleteDialog = true },
+                        modifier = Modifier.weight(1f),
+                    )
+                } else {
+                    EmptyHistoryState(
+                        message = randomMessage,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
             }
         }
     }
@@ -189,6 +274,31 @@ fun HomeScreenEmptyPreview() {
                 isWeightError = false,
                 latestBmi = null,
                 bmiHistory = emptyList(),
+                onWeightInputChange = {},
+                onCalculateBmi = {},
+                onDeleteBmiEntry = {},
+                onDeleteAllHistory = {},
+                onEditHeightClicked = {},
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, device = "spec:width=800dp,height=480dp,dpi=440")
+@Composable
+fun HomeScreenLandscapePreview() {
+    BMICalculatorTheme {
+        Surface {
+            HomeScreenContent(
+                height = 175,
+                weightInput = "70",
+                isWeightError = false,
+                latestBmi = 22.9f,
+                bmiHistory =
+                    listOf(
+                        BmiEntry(id = 0, bmi = 22.9f, weight = 70f, height = 175),
+                        BmiEntry(id = 1, bmi = 24.5f, weight = 75f, height = 175),
+                    ),
                 onWeightInputChange = {},
                 onCalculateBmi = {},
                 onDeleteBmiEntry = {},

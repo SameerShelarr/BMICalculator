@@ -59,6 +59,9 @@ fun HeightPicker(
     pickerStyle: PickerStyle,
     onHeightChange: (Int) -> Unit = {},
 ) {
+    // Stable baseline to avoid jumps during recomposition
+    val baseHeight = remember { pickerStyle.initialHeight }
+
     var targetDistant by remember {
         mutableFloatStateOf(0f)
     }
@@ -100,12 +103,12 @@ fun HeightPicker(
                                 newDistance.coerceIn(
                                     minimumValue =
                                         (
-                                            (pickerStyle.initialHeight) * pickerStyle.spaceInterval -
+                                            (baseHeight) * pickerStyle.spaceInterval -
                                                 pickerStyle.maxHeight * pickerStyle.spaceInterval
                                         ).toFloat(),
                                     maximumValue =
                                         (
-                                            (pickerStyle.initialHeight) * pickerStyle.spaceInterval -
+                                            (baseHeight) * pickerStyle.spaceInterval -
                                                 pickerStyle.minHeight * pickerStyle.spaceInterval
                                         ).toFloat(),
                                 )
@@ -166,7 +169,7 @@ fun HeightPicker(
 
                 for (height in pickerStyle.minHeight..pickerStyle.maxHeight) {
                     val degreeLineScaleX =
-                        middlePoint.x + (pickerStyle.spaceInterval * (height - pickerStyle.initialHeight.toFloat()) + targetDistant)
+                        middlePoint.x + (pickerStyle.spaceInterval * (height - baseHeight.toFloat()) + targetDistant)
                     val lineType =
                         when {
                             height % 10 == 0 -> DegreeLineType.TenTypeLine
