@@ -42,7 +42,7 @@ data class PickerStyle(
     var pickerWidth: Dp = 150.dp,
     var minHeight: Int = 100,
     var maxHeight: Int = 300,
-    var initialHeight: Int = 150,
+    var initialHeight: Int = 165,
     var normalTypeLineColor: Int = Color.LTGRAY,
     var tenTypeLineColor: Int = Color.BLACK,
     var fiveTypeLineColor: Int = Color.RED,
