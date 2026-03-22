@@ -32,8 +32,8 @@ import com.sameershelar.bmicalculator.data.BmiEntry
 import com.sameershelar.bmicalculator.ui.components.BmiCard
 import com.sameershelar.bmicalculator.ui.components.CalculateBmiButton
 import com.sameershelar.bmicalculator.ui.components.ClearHistoryDialog
-import com.sameershelar.bmicalculator.ui.components.HomeBmiHistorySection
 import com.sameershelar.bmicalculator.ui.components.HeightDisplay
+import com.sameershelar.bmicalculator.ui.components.HomeBmiHistorySection
 import com.sameershelar.bmicalculator.ui.components.WeightInput
 import com.sameershelar.bmicalculator.ui.theme.BMICalculatorTheme
 import com.sameershelar.bmicalculator.ui.viewmodels.HomeScreenViewModel
