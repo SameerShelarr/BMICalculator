@@ -10,15 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,9 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sameershelar.bmicalculator.data.BmiEntry
 import com.sameershelar.bmicalculator.ui.components.BmiCard
-import com.sameershelar.bmicalculator.ui.components.BmiHistoryList
+import com.sameershelar.bmicalculator.ui.components.CalculateBmiButton
 import com.sameershelar.bmicalculator.ui.components.ClearHistoryDialog
-import com.sameershelar.bmicalculator.ui.components.EmptyHistoryState
+import com.sameershelar.bmicalculator.ui.components.HomeBmiHistorySection
 import com.sameershelar.bmicalculator.ui.components.HeightDisplay
 import com.sameershelar.bmicalculator.ui.components.WeightInput
 import com.sameershelar.bmicalculator.ui.theme.BMICalculatorTheme
@@ -164,15 +161,10 @@ fun HomeScreenContent(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Button(
-                        onClick = onCalculateBmi,
+                    CalculateBmiButton(
+                        onCalculateBmi = onCalculateBmi,
                         modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(
-                            text = "Calculate BMI",
-                            style = MaterialTheme.typography.labelLarge,
-                        )
-                    }
+                    )
                 }
 
                 Spacer(modifier = Modifier.width(24.dp))
@@ -185,20 +177,13 @@ fun HomeScreenContent(
                             .fillMaxHeight()
                             .padding(vertical = 16.dp),
                 ) {
-                    if (bmiHistory.isNotEmpty()) {
-                        @Suppress("AssignedValueIsNeverRead")
-                        BmiHistoryList(
-                            bmiHistory = bmiHistory,
-                            onDeleteBmiEntry = onDeleteBmiEntry,
-                            onDeleteAllHistory = { showDeleteDialog = true },
-                            modifier = Modifier.weight(1f),
-                        )
-                    } else {
-                        EmptyHistoryState(
-                            message = randomMessage,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
+                    HomeBmiHistorySection(
+                        bmiHistory = bmiHistory,
+                        emptyStateMessage = randomMessage,
+                        onDeleteBmiEntry = onDeleteBmiEntry,
+                        onRequestClearAllHistory = { showDeleteDialog = true },
+                        modifier = Modifier.weight(1f),
+                    )
                 }
             }
         } else {
@@ -232,32 +217,20 @@ fun HomeScreenContent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    onClick = onCalculateBmi,
+                CalculateBmiButton(
+                    onCalculateBmi = onCalculateBmi,
                     modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        text = "Calculate BMI",
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                }
+                )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                if (bmiHistory.isNotEmpty()) {
-                    @Suppress("AssignedValueIsNeverRead")
-                    BmiHistoryList(
-                        bmiHistory = bmiHistory,
-                        onDeleteBmiEntry = onDeleteBmiEntry,
-                        onDeleteAllHistory = { showDeleteDialog = true },
-                        modifier = Modifier.weight(1f),
-                    )
-                } else {
-                    EmptyHistoryState(
-                        message = randomMessage,
-                        modifier = Modifier.weight(1f),
-                    )
-                }
+                HomeBmiHistorySection(
+                    bmiHistory = bmiHistory,
+                    emptyStateMessage = randomMessage,
+                    onDeleteBmiEntry = onDeleteBmiEntry,
+                    onRequestClearAllHistory = { showDeleteDialog = true },
+                    modifier = Modifier.weight(1f),
+                )
             }
         }
     }
